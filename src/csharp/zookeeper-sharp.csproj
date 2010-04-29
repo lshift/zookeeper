@@ -1,0 +1,116 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1DB6281-12F0-45DB-84F9-C5AA72DFBFC1}</ProjectGuid>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>zookeeper-sharp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>zookeeper_sharp</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MiscUtil, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d3c42c4bfacf7596, processorArchitecture=MSIL" />
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="generated\org\apache\zookeeper\data\ACL.cs" />
+    <Compile Include="generated\org\apache\zookeeper\data\Id.cs" />
+    <Compile Include="generated\org\apache\zookeeper\data\Stat.cs" />
+    <Compile Include="generated\org\apache\zookeeper\data\StatPersisted.cs" />
+    <Compile Include="generated\org\apache\zookeeper\data\StatPersistedV1.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\AuthPacket.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\ConnectRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\ConnectResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\CreateRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\CreateResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\DeleteRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\ExistsRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\ExistsResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetACLRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetACLResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetChildren2Request.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetChildren2Response.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetChildrenRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetChildrenResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetDataRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetDataResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetMaxChildrenRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\GetMaxChildrenResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\op_result_t.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\ReplyHeader.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\RequestHeader.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SetACLRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SetACLResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SetDataRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SetDataResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SetMaxChildrenRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SetWatches.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SyncRequest.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\SyncResponse.cs" />
+    <Compile Include="generated\org\apache\zookeeper\proto\WatcherEvent.cs" />
+    <Compile Include="generated\org\apache\zookeeper\server\persistence\FileHeader.cs" />
+    <Compile Include="generated\org\apache\zookeeper\server\quorum\QuorumPacket.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\CreateSessionTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\CreateTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\DeleteTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\ErrorTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\SetACLTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\SetDataTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\SetMaxChildrenTxn.cs" />
+    <Compile Include="generated\org\apache\zookeeper\txn\TxnHeader.cs" />
+    <Compile Include="src\org\apache\jute\BinaryInputArchive.cs" />
+    <Compile Include="src\org\apache\jute\BinaryOutputArchive.cs" />
+    <Compile Include="src\org\apache\jute\InputArchive.cs" />
+    <Compile Include="src\org\apache\jute\OutputArchive.cs" />
+    <Compile Include="src\org\apache\jute\Record.cs" />
+    <Compile Include="src\org\apache\jute\StringOutputArchive.cs" />
+    <Compile Include="src\org\apache\jute\Utils.cs" />
+    <Compile Include="src\org\apache\zookeeper\client\ClientCnxn.cs" />
+    <Compile Include="src\org\apache\zookeeper\client\Packet.cs" />
+    <Compile Include="src\org\apache\zookeeper\client\Watching.cs" />
+    <Compile Include="src\org\apache\zookeeper\client\ZooKeeper.cs" />
+    <Compile Include="src\org\apache\zookeeper\primitives\LockManager.cs" />
+    <Compile Include="src\org\apache\zookeeper\util\SharedQueue.cs" />
+    <Compile Include="src\org\apache\zookeeper\util\Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\MiscUtil.dll" />
+    <Content Include="lib\MiscUtil.xml" />
+    <Content Include="lib\NLog.dll" />
+    <Content Include="lib\NLog.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NLog.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

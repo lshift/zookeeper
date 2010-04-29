@@ -25,7 +25,7 @@ public class JBuffer extends JCompType {
     
     /** Creates a new instance of JBuffer */
     public JBuffer() {
-        super("struct buffer", " ::std::string", "byte[]", "Buffer", "byte[]");
+        super("struct buffer", " ::std::string", "byte[]", "byte[]", "Buffer", "byte[]");
     }
     
     public String genCppGetSet(String fname, int fIdx) {
@@ -63,15 +63,34 @@ public class JBuffer extends JCompType {
       sb.append("    }\n");
       return sb.toString();
     }
+
+    public String genCsharpCompareTo(String fname, String other) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("    {\n");
+      sb.append("      byte[] my = "+fname+";\n");
+      sb.append("      byte[] ur = "+other+";\n");
+      sb.append("      ret = org.apache.jute.Utils.compareBytes(my,0,my.Length,ur,0,ur.Length);\n");
+      sb.append("    }\n");
+      return sb.toString();
+    }
     
     public String genJavaCompareTo(String fname) {
         return genJavaCompareTo(fname, "peer."+fname);
     }
+
+    public String genCsharpCompareTo(String fname) {
+        return genCsharpCompareTo(fname, "peer."+fname);
+    }
+
     public String genJavaCompareToWrapper(String fname, String other) {
       return "    "+genJavaCompareTo(fname, other);
     }
     
     public String genJavaEquals(String fname, String peer) {
+        return "    ret = org.apache.jute.Utils.bufEquals("+fname+","+peer+");\n";
+    }
+
+    public String genCsharpEquals(String fname, String peer) {
         return "    ret = org.apache.jute.Utils.bufEquals("+fname+","+peer+");\n";
     }
     

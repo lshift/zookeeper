@@ -1,0 +1,16 @@
+build
+src/java/lib
+src/*/generated
+*ReSharper*
+*resharper*
+src/csharp/obj
+src/csharp/bin
+src/csharp/tests/obj
+src/csharp/tests/bin
+*.csproj.user
+*.suo
+out/
+*.iml
+.idea/
+.revision/
+conf/zoo.cfg

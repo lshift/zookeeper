@@ -52,6 +52,8 @@
     <property name="src_generated.dir" value="${src.dir}/java/generated" />
     <property name="c.src.dir" value="${src.dir}/c" />    
     <property name="csrc_generated.dir" value="${c.src.dir}/generated" />
+    <property name="csharp.src.dir" value="${src.dir}/csharp" />
+    <property name="csharpsrc_generated.dir" value="${csharp.src.dir}/generated" />
 
     <property name="jute.file" value="${src.dir}/zookeeper.jute" />
 
@@ -226,6 +228,7 @@
     <target name="compile_jute" depends="jute,compile_jute_uptodate" unless="juteBuild.notRequired">
         <mkdir dir="${src_generated.dir}" />
         <mkdir dir="${csrc_generated.dir}" />
+        <mkdir dir="${csharpsrc_generated.dir}" />
         <java classname="org.apache.jute.compiler.generated.Rcc" fork="true" dir="${src_generated.dir}">
             <arg value="-l" />
             <arg value="java" />
@@ -238,6 +241,15 @@
         <java classname="org.apache.jute.compiler.generated.Rcc" fork="true" dir="${csrc_generated.dir}">
             <arg value="-l" />
             <arg value="c" />
+            <arg value="../../zookeeper.jute" />
+            <classpath>
+                <pathelement path="${build.classes}" />
+            </classpath>
+        </java>
+
+        <java classname="org.apache.jute.compiler.generated.Rcc" fork="true" dir="${csharpsrc_generated.dir}">
+            <arg value="-l" />
+            <arg value="csharp" />
             <arg value="../../zookeeper.jute" />
             <classpath>
                 <pathelement path="${build.classes}" />
@@ -736,6 +748,7 @@
       <delete dir="${docs.src}/build"/>
       <delete dir="${src_generated.dir}" />
       <delete dir="${csrc_generated.dir}" />
+      <delete dir="${csharpsrc_generated.dir}" />
       <delete file="${lib.dir}/Null.java"/>
       <delete file="${lib.dir}/rats.jar" />
       <delete file="${jdiff.xml.dir}/${name}_${version}.xml"/>	
@@ -1116,6 +1129,22 @@
          	</fileset>
  	</path>
     </target>	
+
+    <target name="compile-csharp" depends="compile_jute">
+        <exec executable="MSBuild.exe" dir="${csharp.src.dir}">
+               <arg value="zookeeper-sharp.csproj"/>
+               <arg value="/target:Compile"/>
+               <arg value="/property:Configuration=Release"/>
+        </exec>
+    </target>
+
+    <target name="clean-csharp">
+        <exec executable="MSBuild.exe" dir="${csharp.src.dir}">
+            <arg line="zookeeper-sharp.csproj"/>
+           <arg line="/target:Clean"/>
+        </exec>
+    </target>
+
 
     <!-- ================================================================== -->
     <!-- Perform audit activities for the release                           -->

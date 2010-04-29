@@ -41,7 +41,7 @@ public class JMap extends JCompType {
     /** Creates a new instance of JMap */
     public JMap(JType t1, JType t2) {
         super("#error", " ::std::map<"+t1.getCppType()+","+t2.getCppType()+">",
-                "java.util.TreeMap", "Map", "java.util.TreeMap");
+                "java.util.TreeMap", "Map", "IDictionary", "java.util.TreeMap");
         mKey = t1;
         mValue = t2;
     }

@@ -47,9 +47,17 @@ public class JField {
     public String genJavaDecl() {
         return mType.genJavaDecl(mName);
     }
+
+    public String genCsharpDecl() {
+        return mType.genCsharpDecl(mName);
+    }
     
     public String genJavaConstructorParam(String fname) {
         return mType.genJavaConstructorParam(fname);
+    }
+
+    public String genCsharpConstructorParam(String fname) {
+        return mType.genCsharpConstructorParam(fname);
     }
     
     public String getName() {
@@ -71,28 +79,56 @@ public class JField {
     public String genJavaGetSet(int fIdx) {
         return mType.genJavaGetSet(mName, fIdx);
     }
+
+    public String genCsharpGetSet(int fIdx) {
+        return mType.genCsharpGetSet(mName, fIdx);
+    }
     
     public String genJavaWriteMethodName() {
         return mType.genJavaWriteMethod(getName(), getTag());
+    }
+
+    public String genCsharpWriteMethodName() {
+        return mType.genCsharpWriteMethod(getName(), getTag());
     }
     
     public String genJavaReadMethodName() {
         return mType.genJavaReadMethod(getName(), getTag());
     }
+
+    public String genCsharpReadMethodName() {
+        return mType.genCsharpReadMethod(getName(), getTag());
+    }
     
     public String genJavaCompareTo() {
         return mType.genJavaCompareTo(getName());
     }
+
+    public String genCsharpCompareTo() {
+        return mType.genCsharpCompareTo(getName());
+    }
     
     public String genJavaEquals() {
         return mType.genJavaEquals(getName(), "peer."+getName());
+    }
+
+    public String genCsharpEquals() {
+        return mType.genCsharpEquals(getName(), "peer."+getName());
     }
     
     public String genJavaHashCode() {
         return mType.genJavaHashCode(getName());
     }
 
+    public String genCsharpHashCode() {
+        return mType.genCsharpHashCode(getName());
+    }
+
     public String genJavaConstructorSet(String fname) {
         return mType.genJavaConstructorSet(mName, fname);
+    }
+
+    public String genCsharpConstructorSet(String fname) {
+        return mType.genCsharpConstructorSet(mName, fname);
     }
 }

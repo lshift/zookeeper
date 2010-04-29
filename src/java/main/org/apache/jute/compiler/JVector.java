@@ -37,7 +37,7 @@ public class JVector extends JCompType {
     
     /** Creates a new instance of JVector */
     public JVector(JType t) {
-        super("struct " + extractVectorName(t), " ::std::vector<"+t.getCppType()+">", "java.util.List<" + t.getJavaType() + ">", "Vector", "java.util.ArrayList<" + t.getJavaType() + ">");
+        super("struct " + extractVectorName(t), " ::std::vector<"+t.getCppType()+">", "java.util.List<" + t.getJavaType() + ">", "List<" + t.getJavaType() + ">", "Vector", "java.util.ArrayList<" + t.getJavaType() + ">");
         mElement = t;
     }
     
@@ -46,7 +46,7 @@ public class JVector extends JCompType {
     }
     
     public String genJavaCompareTo(String fname) {
-        return "    throw new UnsupportedOperationException(\"comparing "
+        return "    throw new NotSupportedException(\"comparing "
             + fname + " is unimplemented\");\n";
     }
     
@@ -70,9 +70,34 @@ public class JVector extends JCompType {
         ret.append("    }\n");
         return ret.toString();
     }
+
+    public String genCsharpReadWrapper(String fname, String tag, boolean decl) {
+        StringBuilder ret = new StringBuilder("");
+        if (decl) {
+            ret.append("      java.util.List "+fname+";\n");
+        }
+        ret.append("    {\n");
+        incrLevel();
+        ret.append("      Index "+getId("vidx")+" = a_.startVector(\""+tag+"\");\n");
+        ret.append("      if ("+getId("vidx")+"!= null) {");
+        ret.append("          "+fname+"=new System.Collections.Generic.List<"+ mElement.getJavaType() + ">();\n");
+        ret.append("          for (; !"+getId("vidx")+".done(); "+getId("vidx")+".incr()) {\n");
+        ret.append(mElement.genJavaReadWrapper(getId("e"), getId("e"), true));
+        ret.append("            "+fname+".Add("+getId("e")+");\n");
+        ret.append("          }\n");
+        ret.append("      }\n");
+        ret.append("    a_.endVector(\""+tag+"\");\n");
+        decrLevel();
+        ret.append("    }\n");
+        return ret.toString();
+    }
     
     public String genJavaReadMethod(String fname, String tag) {
         return genJavaReadWrapper(fname, tag, false);
+    }
+
+    public String genCsharpReadMethod(String fname, String tag) {
+        return genCsharpReadWrapper(fname, tag, false);
     }
     
     public String genJavaWriteWrapper(String fname, String tag) {
@@ -91,9 +116,30 @@ public class JVector extends JCompType {
         decrLevel();
         return ret.toString();
     }
-    
+
+    public String genCsharpWriteWrapper(String fname, String tag) {
+        StringBuilder ret = new StringBuilder("    {\n");
+        incrLevel();
+        ret.append("      a_.startVector("+fname+",\""+tag+"\");\n");
+        ret.append("      if ("+fname+"!= null) {");
+        ret.append("          int "+getId("len")+" = "+fname+".Count;\n");
+        ret.append("          for(int "+getId("vidx")+" = 0; "+getId("vidx")+"<"+getId("len")+"; "+getId("vidx")+"++) {\n");
+        ret.append("            "+mElement.getJavaWrapperType()+" "+getId("e")+" = ("+mElement.getJavaWrapperType()+") "+fname+"["+getId("vidx")+"];\n");
+        ret.append(mElement.genJavaWriteWrapper(getId("e"), getId("e")));
+        ret.append("          }\n");
+        ret.append("      }\n");
+        ret.append("      a_.endVector("+fname+",\""+tag+"\");\n");
+        ret.append("    }\n");
+        decrLevel();
+        return ret.toString();
+    }
+
     public String genJavaWriteMethod(String fname, String tag) {
         return genJavaWriteWrapper(fname, tag);
+    }
+
+    String genCsharpWriteMethod(String fname, String tag) {
+        return genCsharpWriteWrapper(fname, tag);
     }
     
     public JType getElementType() {

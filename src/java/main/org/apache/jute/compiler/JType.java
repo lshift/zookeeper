@@ -27,6 +27,7 @@ abstract public class JType {
 	private String mCName;
     private String mCppName;
     private String mJavaName;
+    private String mCsharpName;
     private String mMethodSuffix;
     private String mWrapper;
     private String mUnwrapMethod;
@@ -34,10 +35,11 @@ abstract public class JType {
     /**
      * Creates a new instance of JType
      */
-    JType(String cname, String cppname, String javaname, String suffix, String wrapper, String unwrap) {
+    JType(String cname, String cppname, String javaname, String csharpname, String suffix, String wrapper, String unwrap) {
     	mCName = cname;
         mCppName = cppname;
         mJavaName = javaname;
+        mCsharpName = csharpname;
         mMethodSuffix = suffix;
         mWrapper = wrapper;
         mUnwrapMethod = unwrap;
@@ -55,9 +57,17 @@ abstract public class JType {
     String genJavaDecl (String fname) {
         return "  private "+mJavaName+" " +fname+";\n";
     }
+
+    String genCsharpDecl (String fname) {
+        return "  private "+mCsharpName+" " +fname+";\n";
+    }
     
     String genJavaConstructorParam (String fname) {
         return "        "+mJavaName+" "+fname;
+    }
+
+    String genCsharpConstructorParam (String fname) {
+        return "        "+mCsharpName+" "+fname;
     }
     
     String genCppGetSet(String fname, int fIdx) {
@@ -78,6 +88,16 @@ abstract public class JType {
         getFunc += "    return "+fname+";\n";
         getFunc += "  }\n";
         String setFunc = "  public void set"+capitalize(fname)+"("+mJavaName+" m_) {\n";
+        setFunc += "    " + fname+"=m_;\n";
+        setFunc += "  }\n";
+        return getFunc+setFunc;
+    }
+
+    String genCsharpGetSet(String fname, int fIdx) {
+        String getFunc = "  public "+mCsharpName+" get"+capitalize(fname)+"() {\n";
+        getFunc += "    return "+fname+";\n";
+        getFunc += "  }\n";
+        String setFunc = "  public void set"+capitalize(fname)+"("+mCsharpName+" m_) {\n";
         setFunc += "    " + fname+"=m_;\n";
         setFunc += "  }\n";
         return getFunc+setFunc;
@@ -105,11 +125,19 @@ abstract public class JType {
     String genJavaWriteMethod(String fname, String tag) {
         return "    a_.write"+mMethodSuffix+"("+fname+",\""+tag+"\");\n";
     }
+
+    String genCsharpWriteMethod(String fname, String tag) {
+        return "    a_.write"+mMethodSuffix+"("+fname+",\""+tag+"\");\n";
+    }
     
     String genJavaReadMethod(String fname, String tag) {
         return "    "+fname+"=a_.read"+mMethodSuffix+"(\""+tag+"\");\n";
     }
-    
+
+    String genCsharpReadMethod(String fname, String tag) {
+        return "    "+fname+"=a_.read"+mMethodSuffix+"(\""+tag+"\");\n";
+    }
+
     String genJavaReadWrapper(String fname, String tag, boolean decl) {
         String ret = "";
         if (decl) {
@@ -121,12 +149,24 @@ abstract public class JType {
     String genJavaWriteWrapper(String fname, String tag) {
         return "        a_.write"+mMethodSuffix+"("+fname+"."+mUnwrapMethod+"(),\""+tag+"\");\n";
     }
+
+    String genCWriteWrapper(String fname, String tag) {
+        return "        a_.write"+mMethodSuffix+"("+fname+"."+mUnwrapMethod+"(),\""+tag+"\");\n";
+    }
     
     String genJavaCompareTo(String fname) {
         return "    ret = ("+fname+" == peer."+fname+")? 0 :(("+fname+"<peer."+fname+")?-1:1);\n";
     }
+
+    String genCsharpCompareTo(String fname) {
+        return "    ret = ("+fname+" == peer."+fname+")? 0 :(("+fname+"<peer."+fname+")?-1:1);\n";
+    }
     
     String genJavaEquals(String fname, String peer) {
+        return "    ret = ("+fname+"=="+peer+");\n";
+    }
+
+    String genCsharpEquals(String fname, String peer) {
         return "    ret = ("+fname+"=="+peer+");\n";
     }
     
@@ -134,7 +174,15 @@ abstract public class JType {
         return "    ret = (int)"+fname+";\n";
     }
 
+    String genCsharpHashCode(String fname) {
+        return "    ret = (int)"+fname+";\n";
+    }
+
     String genJavaConstructorSet(String fname, String name) {
+        return "    this."+fname+"="+name+";\n";
+    }
+
+    String genCsharpConstructorSet(String fname, String name) {
         return "    this."+fname+"="+name+";\n";
     }
 

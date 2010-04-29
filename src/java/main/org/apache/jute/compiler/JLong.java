@@ -25,7 +25,7 @@ public class JLong extends JType {
     
     /** Creates a new instance of JLong */
     public JLong() {
-        super("int64_t", "int64_t", "long", "Long", "Long", "toLong");
+        super("int64_t", "int64_t", "long", "long", "Long", "Long", "toLong");
     }
     
     public String getSignature() {
@@ -34,5 +34,9 @@ public class JLong extends JType {
     
     public String genJavaHashCode(String fname) {
         return "    ret = (int) ("+fname+"^("+fname+">>>32));\n";
+    }
+
+    public String genCsharpHashCode(String fname) {
+        return "    ret = (int) ("+fname+"^("+fname+">>32) & 0xFFFFFFFF);\n";
     }
 }

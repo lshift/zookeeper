@@ -25,7 +25,7 @@ public class JString extends JCompType {
     
     /** Creates a new instance of JString */
     public JString() {
-        super("char *", " ::std::string", "String", "String", "String");
+        super("char *", " ::std::string", "String", "String", "String", "String");
     }
     
     public String getSignature() {
@@ -42,5 +42,13 @@ public class JString extends JCompType {
     
     public String genJavaWriteWrapper(String fname, String tag) {
         return "        a_.writeString("+fname+",\""+tag+"\");\n";
+    }
+
+    String genCsharpWriteMethod(String fname, String tag) {
+        return "    a_.writeString"+"("+fname+",\""+tag+"\");\n";
+    }
+
+    String genCsharpReadMethod(String fname, String tag) {
+        return "    "+fname+"=a_.readString(\""+tag+"\");\n";
     }
 }
