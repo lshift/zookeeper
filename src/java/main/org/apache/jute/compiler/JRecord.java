@@ -495,7 +495,7 @@ public class JRecord extends JCompType {
             }
         }
         if (unimplemented) {
-            jj.write("    throw new NotSupportedException(\"comparing "
+            jj.write("    throw new UnsupportedOperationException(\"comparing "
                     + getName() + " is unimplemented\");\n");
         } else {
             jj.write("    if (!(peer_ instanceof "+getName()+")) {\n");
