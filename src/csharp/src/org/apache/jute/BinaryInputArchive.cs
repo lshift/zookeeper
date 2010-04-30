@@ -107,12 +107,8 @@ namespace org.apache.jute
         {
             int len = din.ReadInt32();
             if (len == -1) return null;
-            Byte[] b = din.ReadBytesOrThrow(len);
-            Decoder decoder = Encoding.UTF8.GetDecoder();
-            int charCount = decoder.GetCharCount(b, 0, len);
-            Char[] chars = new Char[charCount];
-            decoder.GetChars(b, 0, len, chars, 0);
-            return new String(chars);
+            var b = din.ReadBytesOrThrow(len);
+            return Encoding.UTF8.GetString(b);
         }
 
         public Byte[] readBuffer(string tag)

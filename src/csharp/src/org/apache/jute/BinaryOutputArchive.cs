@@ -88,12 +88,9 @@ namespace org.apache.jute
                 writeInt(-1, "len");
                 return;
             }
-            Encoder encoder = Encoding.UTF8.GetEncoder();
-            Char[] schars = s.ToCharArray();
-            Byte[] bb = new Byte[encoder.GetByteCount(schars, 0, s.Length, true)];
-            encoder.GetBytes(schars, 0, s.Length, bb, 0, true);
+            byte[] bb = Encoding.UTF8.GetBytes(s);
             writeInt(bb.Length, "len");
-            bout.Write(bb);
+            bout.Write(bb, 0, bb.Length);
         }
 
         public void writeBuffer(byte[] barr, String tag)
