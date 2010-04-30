@@ -285,6 +285,22 @@ namespace org.apache.zookeeper.client
             client.submitRequest(header, request, null);
         }
 
+        public void DeleteAll(String path)
+        {
+            Stat stat = Exists(path, false);
+            if (stat != null)
+            {
+                if (stat.getNumChildren() > 0)
+                {
+                    foreach (String child in GetChildren(path, false))
+                    {
+                        DeleteAll(path + "/" + child);
+                    }
+                }
+                Delete(path, -1);
+            }
+        }
+
         public IList<String> GetChildren(String path, bool watch)
         {
             RequestHeader header = new RequestHeader();
@@ -317,7 +333,7 @@ namespace org.apache.zookeeper.client
         public List<ACL> GetAcl(String path)
         {
             RequestHeader header = new RequestHeader();
-            header.setType((int)OpCode.sync);
+            header.setType((int)OpCode.getACL);
             GetACLRequest request = new GetACLRequest(path);
             GetACLResponse response = new GetACLResponse();
             ReplyHeader replyHeader = client.submitRequest(header, request, response);
@@ -328,7 +344,7 @@ namespace org.apache.zookeeper.client
         public Stat SetAcl(String path, List<ACL> acl, int version)
         {
             RequestHeader header = new RequestHeader();
-            header.setType((int)OpCode.sync);
+            header.setType((int)OpCode.setACL);
             SetACLRequest request = new SetACLRequest(path, acl, version);
             SetACLResponse response = new SetACLResponse();
             ReplyHeader replyHeader = client.submitRequest(header, request, response);

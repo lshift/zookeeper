@@ -43,12 +43,7 @@ namespace org.apache.zookeeper.tests
         [TearDown]
         public void TearDown()
         {
-            foreach (String child in zk.GetChildren(servicePath, false))
-            {
-                zk.Delete(servicePath + "/" + child, -1);
-            }
-            zk.Delete(servicePath, -1);
-            zk.Delete(testRoot, -1);
+            zk.DeleteAll(testRoot);
             zk.Stop();
         }
 
@@ -70,7 +65,9 @@ namespace org.apache.zookeeper.tests
         public void DisposalDeletesNode()
         {
             using (lockManager.WithLock(servicePath, 0))
+            {
                 Assert.AreEqual(1, zk.Exists(servicePath, false).getNumChildren());
+            }
             Assert.AreEqual(0, zk.Exists(servicePath, false).getNumChildren());
         }
 
@@ -78,7 +75,9 @@ namespace org.apache.zookeeper.tests
         public void HeldLockUnavailableWithoutWaiting()
         {
             using (lockManager.WithLock(servicePath, 0))
+            {
                 Assert.IsNull(lockManager.WithLock(servicePath, 0));
+            }
         }
 
         [Test]

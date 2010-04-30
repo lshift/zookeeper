@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 using NUnit.Framework;
 using org.apache.zookeeper.client;
 using org.apache.zookeeper.data;
@@ -30,18 +31,26 @@ namespace org.apache.zookeeper.tests
     public class ZooKeeperTest : ZooKeeperTestsCommon
     {
 
+        internal Random rand;
+
         [SetUp]
         protected void SetUp()
         {
             zk = new ZooKeeper(hosts); 
             zk.Start();
+            rand = new Random();
         }
 
         [TearDown]
         protected void Shutdown()
         {
-            zk.Delete(testRoot, -1);
+            zk.DeleteAll(testRoot);
             zk.Stop();
+        }
+
+        private String randStr(int len)
+        {
+            return new String("abc"[rand.Next(3)], rand.Next(len) + 1);
         }
 
         [Test]
@@ -126,7 +135,6 @@ namespace org.apache.zookeeper.tests
             Thread.Sleep(500);
             Assert.AreEqual(1, events.Count);
             Assert.AreEqual(EventType.nodeChildrenChanged, events[0].type);
-            zk.Delete(testRoot + "/child1", -1);
         }
 
         [Test]
@@ -145,7 +153,6 @@ namespace org.apache.zookeeper.tests
             Thread.Sleep(500);
             Assert.AreEqual(1, events.Count);
             Assert.AreEqual(EventType.nodeChildrenChanged, events[0].type);
-            zk2.Delete(testRoot + "/child1", -1);
             zk2.Stop();
         }
 
@@ -211,12 +218,29 @@ namespace org.apache.zookeeper.tests
         }
 
         [Test]
+        public void RecursiveDelete()
+        {
+            var path = new List<String>();
+            zk.Create(testRoot, noData, CreateMode.persistent);
+            int depth = rand.Next(20) + 10;
+            for (int i=0; i<depth; i++)
+            {
+                path.Add(String.Empty);
+                int breadth = rand.Next(5) + 5;
+                for (int j=0; j<breadth; j++)
+                {
+                    path[i] = randStr(10);
+                    var pathStr = path.Aggregate(testRoot, (acc, p) => acc + "/" + p);
+                    zk.Create(pathStr, Util.Convert(randStr(1000)), CreateMode.persistent);
+                }
+            }
+        }
+
+        [Test]
         public void ProtocolStress()
         {
             int requests = 100;
-            Random rand = new Random();
             var nodes = new List<String>();
-            Func<int, String> randStr = (l) => new String("abc"[rand.Next(3)], rand.Next(l) + 1);
             zk.Create(testRoot, noData, CreateMode.persistent);
 
             zk.Create(testRoot + "/a", noData, CreateMode.persistent);
@@ -224,7 +248,7 @@ namespace org.apache.zookeeper.tests
 
             while (requests-- > 0)
             {
-                int spinTheWheel = rand.Next(7);
+                int spinTheWheel = rand.Next(9);
                 var randomNode = nodes[rand.Next(nodes.Count)];
                 switch (spinTheWheel)
                 {
@@ -261,11 +285,14 @@ namespace org.apache.zookeeper.tests
                     case 6:
                         zk.AddAuthInfo("digest", Util.Convert(randStr(20) + ":" + randStr(20)));
                         break;
+                    case 7:
+                        zk.GetAcl(randomNode);
+                        break;
+                    case 8:
+                        zk.SetAcl(randomNode, Ids.openAclUnsafe, -1);
+                        break;
+                        
                 }
-            }
-            foreach (String path in zk.GetChildren(testRoot, false))
-            {
-                zk.Delete(testRoot + "/" + path, -1);
             }
         }
     }
